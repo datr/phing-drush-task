@@ -61,6 +61,7 @@ class DrushTask extends Task {
   private $command = array();
   private $bin = NULL;
   private $uri = NULL;
+  private $target = NULL;
   private $root = NULL;
   private $assume = NULL;
   private $simulate = FALSE;
@@ -98,6 +99,13 @@ class DrushTask extends Task {
    */
   public function setUri($str) {
     $this->uri = $str;
+  }
+
+  /**
+   * Alias of the Drupal install to use.
+   */
+  public function setTarget($str) {
+    $this->target = $str;
   }
 
   /**
@@ -212,18 +220,20 @@ class DrushTask extends Task {
     $option->setName('nocolor');
     $this->options[] = $option;
 
-    if (!empty($this->root)) {
-      $option = new DrushOption();
-      $option->setName('root');
-      $option->addText($this->root);
-      $this->options[] = $option;
-    }
+    if (empty($this->target)) {
+      if (!empty($this->root)) {
+        $option = new DrushOption();
+        $option->setName('root');
+        $option->addText($this->root);
+        $this->options[] = $option;
+      }
 
-    if (!empty($this->uri)) {
-      $option = new DrushOption();
-      $option->setName('uri');
-      $option->addText($this->uri);
-      $this->options[] = $option;
+      if (!empty($this->uri)) {
+        $option = new DrushOption();
+        $option->setName('uri');
+        $option->addText($this->uri);
+        $this->options[] = $option;
+      }
     }
 
     if (is_bool($this->assume)) {
@@ -253,6 +263,8 @@ class DrushTask extends Task {
     foreach ($this->options as $option) {
       $command[] = $option->toString();
     }
+
+    if (!empty($this->target)) $command[] = '@' . $this->target;
 
     $command[] = $this->command;
 
