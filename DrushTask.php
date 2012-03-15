@@ -61,7 +61,7 @@ class DrushTask extends Task {
   private $command = array();
   private $bin = NULL;
   private $uri = NULL;
-  private $target = NULL;
+  private $site = NULL;
   private $root = NULL;
   private $assume = NULL;
   private $simulate = FALSE;
@@ -104,8 +104,8 @@ class DrushTask extends Task {
   /**
    * Alias of the Drupal install to use.
    */
-  public function setTarget($str) {
-    $this->target = $str;
+  public function setSite($str) {
+    $this->site = $str;
   }
 
   /**
@@ -264,7 +264,7 @@ class DrushTask extends Task {
       $command[] = $option->toString();
     }
 
-    if (!empty($this->target)) $command[] = '@' . $this->target;
+    if (!empty($this->site)) $command[] = '@' . $this->site;
 
     $command[] = $this->command;
 
